@@ -1,19 +1,10 @@
-                                                                                                                                            package com.example.voicesample
+package com.example.voicesample
 
 import android.os.Bundle
 import android.Manifest
 import android.speech.RecognitionListener
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.content.Intent
@@ -25,9 +16,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import java.util.Locale
-import com.example.voicesample.ui.theme.VoiceSampleTheme
 
-class MainActivity : AppCompatActivity(), RecognitionListener {
+class MainActivity : ComponentActivity(), RecognitionListener {
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var startButton: Button
     private lateinit var resultTextView: TextView
@@ -54,7 +44,7 @@ class MainActivity : AppCompatActivity(), RecognitionListener {
     }
     private fun initializeSpeechRecognizer() {
         if (!SpeechRecognizer.isRecognitionAvailable(this)) {
-            Toast.makeText(this, "音声認識が利用できません", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Couldn't use speech recognizer", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -65,7 +55,7 @@ class MainActivity : AppCompatActivity(), RecognitionListener {
 
     private fun startListening() {
         if (!::speechRecognizer.isInitialized) {
-            Toast.makeText(this, "初期化中です。しばらくお待ちください。", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Initializing...", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -106,9 +96,9 @@ class MainActivity : AppCompatActivity(), RecognitionListener {
         val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         if (!matches.isNullOrEmpty()) {
             val bestResult = matches[0]
-            resultTextView.text = "認識結果: $bestResult\n(候補数: ${matches.size})"
+            resultTextView.text = "Result: $bestResult\n(候補数: ${matches.size})"
         } else {
-            resultTextView.text = "認識できませんでした。"
+            resultTextView.text = "Failed recognizing"
         }
         startButton.isEnabled = true
     }
@@ -148,21 +138,5 @@ class MainActivity : AppCompatActivity(), RecognitionListener {
                 startButton.isEnabled = false
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    VoiceSampleTheme {
-        Greeting("Android")
     }
 }
